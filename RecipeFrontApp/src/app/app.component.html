@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between w-full">
 
     <div class="flex flex-col">
-      <!--TItle-->
+      <!--Title-->
       <h1 class="text-3xl font-bold truncate" (click)="redirectToHome()"> {{ title }} </h1>
       @if((loggedIn$ | async)?.loginState )
       {
@@ -30,8 +30,9 @@
 
           <button routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page"
             class="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">Profile</button>
-          <button routerLink="/logout" routerLinkActive="active" ariaCurrentWhenActive="page"
+          <button (click)="logout()"
             class="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">Logout</button>
+
           }
           @else{
           <button routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page"
@@ -55,7 +56,7 @@
 
       <button routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page"
         class="border-2 border-amber-400 bg-amber-500 hover:bg-amber-400 text-white font-bold py-2 px-4 rounded">Profile</button>
-      <button routerLink="/logout" routerLinkActive="active" ariaCurrentWhenActive="page"
+      <button (click)="logout()"
         class="border-2 border-amber-400 bg-amber-500 hover:bg-amber-400 text-white font-bold py-2 px-4 rounded">Logout</button>
       }
       @else {
@@ -69,8 +70,8 @@
   </div>
 </nav>
 
-<main class="main h-screen bg-gradient-to-br from-beige to-latte flex flex-col items-center justify-center ">
+<main class="main h-screen bg-gradient-to-br from-beige to-latte flex flex-col items-center justify-center">
   <!-- all pages through routes  -->
-  <router-outlet />
+  <router-outlet></router-outlet>
 </main>
 <app-footer></app-footer>

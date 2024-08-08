@@ -13,9 +13,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  //Denna url kommer ändras när vi deployar  https://angular-laravel-deploy-show.onrender.com/api/!!!
   private baseUrl = 'https://u06-fullstack-recipe-app-lemonyblossom.onrender.com/api/';
-  //'http://127.0.0.1:8000/api/';
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -27,20 +25,15 @@ export class AuthService {
   });
   public loggedIn$: Observable<LoggedInUser> = this.loggedIn.asObservable();
 
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   updateLoginState(loginState: LoggedInUser) {
     this.loggedIn.next(loginState);
   }
 
-  //only for me to see
   getLoginStatus() {
-/*     return this.loggedIn.value;
- */    return this.loggedIn.value.loginState;
-
+    return this.loggedIn.value.loginState;
   }
-
 
   logIn(loginDetails: LoginDetails) {
     this.http.post<any>(this.baseUrl + 'login', loginDetails, this.httpOptions).pipe(
@@ -51,6 +44,7 @@ export class AuthService {
           loginState: true,
         });
         this.httpOptions.headers = this.httpOptions.headers.set('Authorization', "Bearer " + res.token);
+        localStorage.setItem("token", res.token); // Store token locally
       })
   }
 
@@ -62,11 +56,11 @@ export class AuthService {
           user: undefined,
           loginState: false,
         });
-        const token = localStorage.getItem("token") || '';
-        this.httpOptions.headers = this.httpOptions.headers.set('Authorization', "Bearer " + token);
+        this.httpOptions.headers = this.httpOptions.headers.delete('Authorization'); // Remove token from headers
+        localStorage.removeItem("token"); // Remove token from local storage
+        this.router.navigate(['/login']); // Redirect to login page
       })
   }
-
 
   getCurrentUser(): Observable<User> {
     return this.http
@@ -78,16 +72,12 @@ export class AuthService {
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 404) {
-      //client-side
       console.error('An error occurred:', error.error);
     } else {
-      // The backend
-      console.error(
-        `Backend returned code ${error.status}`);
+      console.error(`Backend returned code ${error.status}`);
     }
     return throwError(() => new Error('Something went wrong; Try again later.'));
   }
-
 
   register(registerDetails: any): Observable<any> {
     return this.http
@@ -98,6 +88,4 @@ export class AuthService {
       )
       .pipe(catchError(this.handleError));
   }
-
-
 }
