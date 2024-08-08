@@ -46,9 +46,5 @@ export class LoginComponent {
       console.error('Login failed:', error);
     }
   }
-
-  logOut() {
-    return this.auth.logOut();
-  }
 }
 
