@@ -25,7 +25,12 @@ export class AuthService {
   });
   public loggedIn$: Observable<LoggedInUser> = this.loggedIn.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) {
+    const token = localStorage.getItem("token");
+    if (token) {
+      this.httpOptions.headers = this.httpOptions.headers.set('Authorization', `Bearer ${token}`);
+    }
+  }
 
   updateLoginState(loginState: LoggedInUser) {
     this.loggedIn.next(loginState);
@@ -43,9 +48,10 @@ export class AuthService {
           user: res.user,
           loginState: true,
         });
-        this.httpOptions.headers = this.httpOptions.headers.set('Authorization', "Bearer " + res.token);
-        localStorage.setItem("token", res.token); // Store token locally
-      })
+        const token = res.token;
+        this.httpOptions.headers = this.httpOptions.headers.set('Authorization', `Bearer ${token}`);
+        localStorage.setItem("token", token); // Store token locally
+      });
   }
 
   logOut() {
@@ -59,7 +65,7 @@ export class AuthService {
         this.httpOptions.headers = this.httpOptions.headers.delete('Authorization'); // Remove token from headers
         localStorage.removeItem("token"); // Remove token from local storage
         this.router.navigate(['/login']); // Redirect to login page
-      })
+      });
   }
 
   getCurrentUser(): Observable<User> {
