@@ -6,6 +6,13 @@
             class="border-2 border-yellow-700 rounded-md px-2 py-1 bg-white ml-2" (keydown.enter)="searchRecipes()">
       </div>
 
+
+      <div class="flex flex-col">
+         <label for="filterTerm" class="text-yellow-700 ml-3 scrollbar-hidden">Filter</label>
+         <input type="text" id="filterTerm" placeholder="Filter recipes..." [(ngModel)]="filterTerm"
+            class="border-2 border-yellow-700 rounded-md px-2 py-1 bg-white ml-2">
+      </div>
+
       <button (click)="searchRecipes()"
          class="border-2 border-amber-400 bg-amber-500 hover:bg-amber-400 text-white font-bold py-1 px-3 rounded-md ml-2 "
          style="align-self: flex-end;">

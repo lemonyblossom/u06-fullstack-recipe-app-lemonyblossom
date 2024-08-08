@@ -13,6 +13,7 @@ import { RouterLink } from '@angular/router';
 })
 
 export class RecipeSearchComponent implements OnInit {
+  filterTerm: string = '';
   searchTerm: string = 'Dinner';
   recipes: RecipeResponse[] = [];
 
@@ -50,6 +51,18 @@ export class RecipeSearchComponent implements OnInit {
       );
       console.log(recipes);
       this.recipes = recipes;
+      this.applyFilter();
     });
+  }
+
+
+  applyFilter() {
+    if (this.filterTerm) {
+      this.recipes = this.recipes.filter(recipe =>
+        recipe.label.toLowerCase().includes(this.filterTerm.toLowerCase())
+      );
+    } else {
+      this.searchRecipes();
+    }
   }
 }
