@@ -33,6 +33,7 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
+    console.log('Logout function called in AppComponent');
     this.auth.logOut().subscribe({
       next: () => {
         console.log('Logout successful, navigating to login');
