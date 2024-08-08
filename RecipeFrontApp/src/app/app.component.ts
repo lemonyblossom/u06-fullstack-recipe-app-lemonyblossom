@@ -35,7 +35,15 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    this.auth.logOut();
+    this.auth.logOut().subscribe({
+      next: () => {
+        console.log('Logout successful, navigating to login');
+        this.route.navigate(['/login']);
+      },
+      error: (error: any) => {
+        console.error('Logout failed:', error);
+      }
+    });
   }
 }
 

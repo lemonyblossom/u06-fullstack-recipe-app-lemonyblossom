@@ -1,11 +1,10 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { User } from '../interfaces/user';
 import { LoggedInUser } from '../interfaces/loggedinuser';
 import { LoginDetails } from '../interfaces/login-details';
-import { Registeruserinfo } from '../interfaces/registeruserinfo';
-import { tap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -54,18 +53,19 @@ export class AuthService {
       });
   }
 
-  logOut() {
-    this.http.post<any>(this.baseUrl + 'logout', {}, this.httpOptions).pipe(
-      catchError(this.handleError)).subscribe(res => {
-        console.log(res);
+  logOut(): Observable<any> {
+    return this.http.post<any>(this.baseUrl + 'logout', {}, this.httpOptions).pipe(
+      tap(() => {
+        console.log('Logout request successful');
         this.updateLoginState({
           user: undefined,
           loginState: false,
         });
         this.httpOptions.headers = this.httpOptions.headers.delete('Authorization'); // Remove token from headers
-        localStorage.removeItem("token"); // Remove token from local storage
-        this.router.navigate(['/login']); // Redirect to login page
-      });
+        localStorage.removeItem('token'); // Remove token from local storage
+      }),
+      catchError(this.handleError)
+    );
   }
 
   getCurrentUser(): Observable<User> {
