@@ -4,29 +4,30 @@ import { RecipeService } from '../../services/recipe.service';
 import { RecipeResponse } from '../../interfaces/recipe';
 import { RecipeidformatterPipe } from '../../pipes/recipeidformatter.pipe';
 import { RouterLink } from '@angular/router';
+
 @Component({
   selector: 'app-recipe-search',
   standalone: true,
   imports: [FormsModule, RouterLink, RecipeidformatterPipe],
   templateUrl: './recipe-search.component.html',
-  styleUrl: './recipe-search.component.css'
+  styleUrls: ['./recipe-search.component.css']
 })
-
 export class RecipeSearchComponent implements OnInit {
   filterTerm: string = '';
   searchTerm: string = 'Dinner';
   recipes: RecipeResponse[] = [];
-
+  allRecipes: RecipeResponse[] = [];
 
   constructor(private recipeService: RecipeService) { }
+
   ngOnInit(): void {
     this.searchRecipes();
   }
+
   searchRecipes() {
     this.recipeService.Recipes(this.searchTerm).subscribe((res) => {
       console.table(res);
-      let recipes: RecipeResponse[];
-      recipes = res.hits.map(
+      this.recipes = res.hits.map(
         (item: {
           recipe: {
             label: any;
@@ -49,20 +50,26 @@ export class RecipeSearchComponent implements OnInit {
           };
         }
       );
-      console.log(recipes);
-      this.recipes = recipes;
+      this.allRecipes = this.recipes;
       this.applyFilter();
     });
   }
 
-
   applyFilter() {
     if (this.filterTerm) {
-      this.recipes = this.recipes.filter(recipe =>
+      this.recipes = this.allRecipes.filter(recipe =>
         recipe.label.toLowerCase().includes(this.filterTerm.toLowerCase())
       );
     } else {
-      this.searchRecipes();
+      this.recipes = this.allRecipes;
     }
+  }
+
+  onSearch() {
+    this.searchRecipes();
+  }
+
+  onFilterChange() {
+    this.applyFilter();
   }
 }

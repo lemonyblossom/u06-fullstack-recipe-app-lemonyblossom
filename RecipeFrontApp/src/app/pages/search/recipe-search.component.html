@@ -1,31 +1,27 @@
 <div class="h-[88vh] m-2 flex flex-col scrollbar-hidden">
-   <div class="search-container mt-5 flex ">
+   <div class="search-container mt-5 flex">
       <div class="flex flex-col">
          <label for="searchTerm" class="text-yellow-700 ml-3 scrollbar-hidden">Search</label>
          <input type="text" id="searchTerm" placeholder="Search for recipes..." [(ngModel)]="searchTerm"
-            class="border-2 border-yellow-700 rounded-md px-2 py-1 bg-white ml-2" (keydown.enter)="searchRecipes()">
+            class="border-2 border-yellow-700 rounded-md px-2 py-1 bg-white ml-2" (keydown.enter)="onSearch()">
       </div>
-
 
       <div class="flex flex-col">
          <label for="filterTerm" class="text-yellow-700 ml-3 scrollbar-hidden">Filter</label>
          <input type="text" id="filterTerm" placeholder="Filter recipes..." [(ngModel)]="filterTerm"
-            class="border-2 border-yellow-700 rounded-md px-2 py-1 bg-white ml-2">
+            class="border-2 border-yellow-700 rounded-md px-2 py-1 bg-white ml-2" (input)="onFilterChange()">
       </div>
 
-      <button (click)="searchRecipes()"
-         class="border-2 border-amber-400 bg-amber-500 hover:bg-amber-400 text-white font-bold py-1 px-3 rounded-md ml-2 "
+      <button (click)="onSearch()"
+         class="border-2 border-amber-400 bg-amber-500 hover:bg-amber-400 text-white font-bold py-1 px-3 rounded-md ml-2"
          style="align-self: flex-end;">
          GO!
       </button>
-
    </div>
 
    <div
       class="h-[80vh] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-2 overflow-y-auto scrollbar-hidden">
-
-      @for(recipe of recipes; track recipe)
-      {
+      @for(recipe of recipes; track recipe) {
       <a [routerLink]="['/recipe', recipe.self | recipeidformatter]">
          <article class="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center">
             <img src="{{ recipe.image }}" width="200" class="mx-auto mb-2" />
