@@ -1,50 +1,44 @@
-<div class="h-screen flex justify-center items-center mt-11 md:mx-2 md:mt-0">
-   <div class="h-[85vh] max-w-[80vw] mx-auto p-8 bg-white rounded-lg shadow-md md:max-w-[60vw]">
+<div class="h-screen flex justify-center items-center mt-0 md:mx-2 md:pt-6">
+   <div
+      class="h-[85vh] max-w-[95vw] mx-auto p-8 bg-white rounded-lg shadow-md md:max-w-[60vw] overflow-y-auto scrollbar-hidden">
       <div class="flex justify-center flex-col items-center">
-         <h2 class="text-2xl font-bold mb-4">{{ recipe?.label }}</h2>
-         <img src="{{ recipe?.image }}" alt="{{ recipe?.label }}" class="rounded-lg" />
+         <h2 class="text-2xl font-bold mb-4 text-center">{{ recipe?.label }}</h2>
+         <p class="text-md text-stone-700"><span class="font-medium">Total Time: </span>{{ recipe?.totalTime }}
+            minutes</p>
+         <img src="{{ recipe?.image }}" alt="{{ recipe?.label }}" class="rounded-lg max-w-full h-auto" />
       </div>
 
       <div class="grid grid-cols-1 gap-4 mb-2">
-         <h3 class="text-lg font-semibold flex ">Recipe Details:</h3>
-         <article class=" border-2 border-stone-200 grid grid-cols-3 gap-4 p-2">
-            <div>
-               <ul>
+         <p class="text-md font-medium pt-2">Recipe Details:</p>
+         <article class="grid grid-cols-3 gap-4 p-2">
+            <div class="col-span-3">
+               <p>Ingredients:</p>
+               <ul class="list-disc list-inside">
                   @for (line of recipe?.ingredientLines; track line) {
                   <li>{{ line }}</li>
                   }
                </ul>
-               <p class="text-md text-stone-700">
-                  <span class="font-semibold">Cuisine:</span>
-                  {{ recipe?.cuisineType }}
-               </p>
-               <p class="text-md text-stone-700"><span class="font-semibold">Good for: </span> {{ recipe?.mealType }}
-               </p>
-               <p class="text-md text-stone-700"><span class="font-semibold">Total Time: </span>{{ recipe?.totalTime }}
-                  minutes</p>
             </div>
 
-            <div>
-               <p class="text-md text-stone-700"><span class="font-semibold">Category: </span> {{ recipe?.dishType }}
-               </p>
-               <p class="text-md text-stone-700"><span class="font-semibold">!Cautions!: </span>{{ recipe?.cautions }}
-               </p>
-
-            </div>
-
-            <!-- Add an empty div as a placeholder for the third column -->
-            <div>
-               <!-- <p class="text-md text-stone-700"><span class="font-semibold">Cook this recipe now: </span>{{
-                  recipe?.source }}
-               </p> -->
-            </div>
          </article>
-
-         <br />
       </div>
+      <table class="table-auto w-full text-left text-md text-stone-700">
+         <tbody>
+            <tr>
+               <td class="border px-4 py-2"><span class="font-medium">Cuisine:</span> {{ recipe?.cuisineType }}
+               </td>
+               <td class="border px-4 py-2"><span class="font-medium">Good for:</span> {{ recipe?.mealType }}</td>
+            </tr>
+            <tr>
+               <td class="border px-4 py-2"><span class="font-medium">Category:</span> {{ recipe?.dishType }}</td>
+               <td class="border px-4 py-2"><span class="font-medium">!Cautions!</span> {{ recipe?.cautions }}
+               </td>
+            </tr>
+         </tbody>
+      </table>
 
-      <div>
-         <p class="text-sm text-stone-800"><span class="font-semibold">Dietary info: </span>{{ recipe?.healthLabels
+      <div class="mt-4">
+         <p class="text-sm text-stone-800"><span class="font-medium">Dietary info: </span>{{ recipe?.healthLabels
             }}</p>
       </div>
    </div>
