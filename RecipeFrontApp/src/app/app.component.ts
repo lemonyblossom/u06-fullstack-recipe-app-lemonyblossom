@@ -32,14 +32,14 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
+  /*  logOut() {
+     this.auth.logMeOut();
+     alert('Logged out successfully');
+ 
+   } */
+
+
   logOut() {
-    this.auth.logMeOut();
-    alert('Logged out successfully');
-
-  }
-
-
-  /* logOut() {
     console.log('Logout function called in AppComponent');
     this.auth.logOut().subscribe({
       next: () => {
@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
         console.error('Logout failed:', error);
       }
     });
-  } */
+  }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
