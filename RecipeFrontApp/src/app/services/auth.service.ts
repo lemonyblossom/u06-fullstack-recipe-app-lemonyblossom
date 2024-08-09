@@ -52,21 +52,34 @@ export class AuthService {
         localStorage.setItem("token", token); // Store token locally
       });
   }
-
-  logOut(): Observable<any> {
-    return this.http.post<any>(this.baseUrl + 'logout', {}, this.httpOptions).pipe(
-      tap(() => {
-        console.log('Logout request successful');
-        this.updateLoginState({
-          user: undefined,
-          loginState: false,
-        });
-        this.httpOptions.headers = this.httpOptions.headers.delete('Authorization'); // Remove token from headers
-        localStorage.removeItem('token'); // Remove token from local storage
-      }),
-      catchError(this.handleError)
+  logMeOut() {
+    this.updateLoginState({
+      user: undefined,
+      loginState: false,
+    });
+    this.httpOptions.headers = this.httpOptions.headers.set(
+      "Authorization",
+      "Bearer "
     );
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
   }
+
+  /* Previously server side logout for security to request token removal from api, did not get it to work on prod enviroment*/
+  /*   logOut(): Observable<any> {
+      return this.http.post<any>(this.baseUrl + 'logout', {}, this.httpOptions).pipe(
+        tap(() => {
+          console.log('Logout request successful');
+          this.updateLoginState({
+            user: undefined,
+            loginState: false,
+          });
+          this.httpOptions.headers = this.httpOptions.headers.delete('Authorization'); // Remove token from headers
+          localStorage.removeItem('token'); // Remove token from local storage
+        }),
+        catchError(this.handleError)
+      );
+    } */
 
   getCurrentUser(): Observable<User> {
     return this.http

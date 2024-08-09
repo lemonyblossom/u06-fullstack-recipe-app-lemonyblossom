@@ -1,6 +1,6 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { LoggedInUser } from './interfaces/loggedinuser';
 import { LoginComponent } from './pages/login/login.component';
 import { FooterComponent } from './footer/footer.component';
@@ -32,7 +32,14 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  logout() {
+  logOut() {
+    this.auth.logMeOut();
+    alert('Logged out successfully');
+
+  }
+
+
+  /* logOut() {
     console.log('Logout function called in AppComponent');
     this.auth.logOut().subscribe({
       next: () => {
@@ -43,5 +50,22 @@ export class AppComponent implements OnInit {
         console.error('Logout failed:', error);
       }
     });
+  } */
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
+
+  closeMenu() {
+    this.isMenuOpen = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.menu') && !target.closest('.menu-button')) {
+      this.closeMenu();
+    }
+  }
+
 }
