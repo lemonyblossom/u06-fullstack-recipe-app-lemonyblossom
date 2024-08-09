@@ -1,8 +1,7 @@
 <nav class="flex flex-wrap items-center justify-between gap-4 fixed top-0 w-full bg-white shadow-md z-10 px-4 py-2">
   <div class="flex items-center justify-between w-full">
-
     <div class="flex flex-col">
-      <!--Title-->
+      <!-- Title -->
       <h1 class="text-3xl font-bold truncate" (click)="redirectToHome()"> {{ title }} </h1>
       @if((loggedIn$ | async)?.loginState )
       {
@@ -10,57 +9,55 @@
       }
     </div>
 
-    <!--Mobile-->
+    <!-- Mobile -->
     <div class="w-[50vw] flex flex-col md:flex-row items-center justify-between">
       <!-- Dropdown Button for Mobile -->
       <div class="relative ml-auto">
-        <button (mouseup)="isMenuOpen = !isMenuOpen" type="button"
-          class="block md:hidden border-2 border-amber-400 bg-amber-500 text-white font-bold py-2 px-4 rounded">
+        <button (click)="toggleMenu()" type="button"
+          class="block md:hidden border-2 border-amber-400 bg-amber-500 text-white font-bold py-2 px-4 rounded menu-button">
           Menu
         </button>
 
         <!-- Dropdown Menu -->
-        <div class="md:hidden absolute right-0  bg-white border border-gray-200 shadow-lg rounded-md z-10"
-          [class.hidden]="!isMenuOpen" (mouseup)="isMenuOpen = true">
+        <div class="md:hidden absolute right-0 bg-white border border-gray-200 shadow-lg rounded-md z-10 menu"
+          [class.hidden]="!isMenuOpen">
           <button routerLink="/search" routerLinkActive="active" ariaCurrentWhenActive="page"
-            class="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">Search recipes</button>
+            class="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+            (click)="closeMenu()">Search recipes</button>
 
           <!-- Buttons for logged-in state -->
           @if((loggedIn$ | async)?.loginState){
-
           <button routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page"
-            class="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">Profile</button>
-          <button (click)="logout()"
+            class="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+            (click)="closeMenu()">Profile</button>
+          <button (click)="logOut()"
             class="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">Logout</button>
-
           }
           @else{
           <button routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page"
-            class="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">Login</button>
+            class="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+            (click)="closeMenu()">Login</button>
           <button routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page"
-            class="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">Register</button>
+            class="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+            (click)="closeMenu()">Register</button>
           }
         </div>
       </div>
-
     </div>
 
-    <!--Desktop-->
-    <!-- Buttons -->
+    <!-- Desktop -->
     <div class="hidden md:flex gap-4 min-w-[60%] justify-end">
       <button routerLink="/search" routerLinkActive="active" ariaCurrentWhenActive="page"
         class="border-2 border-amber-400 bg-amber-500 hover:bg-amber-400 text-white font-bold py-2 px-4 rounded">Search
         for recipes</button>
       <!-- for logged-in state -->
       @if((loggedIn$ | async)?.loginState){
-
       <button routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page"
         class="border-2 border-amber-400 bg-amber-500 hover:bg-amber-400 text-white font-bold py-2 px-4 rounded">Profile</button>
-      <button (click)="logout()"
+      <button (click)="logOut()"
         class="border-2 border-amber-400 bg-amber-500 hover:bg-amber-400 text-white font-bold py-2 px-4 rounded">Logout</button>
       }
       @else {
-      <!--not logged in-->
       <button routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page"
         class="border-2 border-amber-400 bg-amber-500 hover:bg-amber-400 text-white font-bold py-2 px-4 rounded">Login</button>
       <button routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page"
