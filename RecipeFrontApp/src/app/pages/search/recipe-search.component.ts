@@ -15,6 +15,8 @@ import { RouterLink } from '@angular/router';
 export class RecipeSearchComponent implements OnInit {
   filterTerm: string = '';
   searchTerm: string = 'Dinner';
+  cuisineType: string = '';
+  healthLabel: string = '';
   recipes: RecipeResponse[] = [];
   allRecipes: RecipeResponse[] = [];
 
@@ -25,34 +27,40 @@ export class RecipeSearchComponent implements OnInit {
   }
 
   searchRecipes() {
-    this.recipeService.Recipes(this.searchTerm).subscribe((res) => {
-      console.table(res);
-      this.recipes = res.hits.map(
-        (item: {
-          recipe: {
-            label: any;
-            image: any;
-            ingredientLines: any;
-            totalTime: any;
-            yield: any;
-            dishType: any;
-          };
-          _links: { self: { href: any } };
-        }) => {
-          return {
-            label: item.recipe.label,
-            dishType: item.recipe.dishType,
-            image: item.recipe.image,
-            ingredientLines: item.recipe.ingredientLines,
-            totalTime: item.recipe.totalTime,
-            yield: item.recipe.yield,
-            self: item._links.self.href,
-          };
-        }
-      );
-      this.allRecipes = this.recipes;
-      this.applyFilter();
-    });
+    this.recipeService.Recipes(this.searchTerm, this.cuisineType, this.healthLabel).subscribe(
+      (res) => {
+        this.recipes = res.hits.map(
+          (item: {
+            recipe: {
+              label: string;
+              image: string;
+              ingredientLines: string[];
+              totalTime: number;
+              yield: number;
+              dishType: string;
+              healthLabels: string[];
+            };
+            _links: { self: { href: string } };
+          }) => {
+            return {
+              label: item.recipe.label,
+              dishType: item.recipe.dishType,
+              image: item.recipe.image,
+              ingredientLines: item.recipe.ingredientLines,
+              totalTime: item.recipe.totalTime,
+              yield: item.recipe.yield,
+              healthLabels: item.recipe.healthLabels,
+              self: item._links.self.href,
+            };
+          }
+        );
+        this.allRecipes = this.recipes;
+        this.applyFilter();
+      },
+      (error) => {
+        console.error('Error fetching recipes', error);
+      }
+    );
   }
 
   applyFilter() {
@@ -71,5 +79,13 @@ export class RecipeSearchComponent implements OnInit {
 
   onFilterChange() {
     this.applyFilter();
+  }
+
+  onCuisineTypeChange(event: any) {
+    this.cuisineType = event.target.value;
+  }
+
+  onHealthLabelChange(event: any) {
+    this.healthLabel = event.target.value;
   }
 }

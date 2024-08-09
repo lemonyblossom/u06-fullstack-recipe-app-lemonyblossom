@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, } from '@angular/core';
-import { Observable, throwError, forkJoin } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RecipeResponse } from '../interfaces/recipe';
 
@@ -24,20 +24,12 @@ export class RecipeService {
   Recipes(
     q: string,
     cuisineType?: string,
-    mealType?: string,
-    dishType?: string
+    healthLabel?: string
   ): Observable<any> {
-    dishType = '';
-    cuisineType = '';
-    mealType = '';
-    let url =
-      this.baseUrl + '&random=true' +
-      '&q=' +
-      q + '&mealtype=' +
-      '&app_id=' +
-      this.app_id +
-      '&app_key=' +
-      this.app_key;
+    let url = `${this.baseUrl}&q=${q}&app_id=${this.app_id}&app_key=${this.app_key}&random=true`;
+    if (cuisineType) url += `&cuisineType=${cuisineType}`;
+    if (healthLabel) url += `&health=${healthLabel}`;
+
     return this.http.get<any>(url, this.httOptions);
   }
 
@@ -46,9 +38,7 @@ export class RecipeService {
     const observables: Observable<RecipeResponse[]>[] = [];
 
     dishTypes.forEach((dishType) => {
-
-      const url =
-        `${this.baseUrl}&dishType=${dishType}&random=true&app_id=${this.app_id}&app_key=${this.app_key}&from=0&to=3`;
+      const url = `${this.baseUrl}&dishType=${dishType}&random=true&app_id=${this.app_id}&app_key=${this.app_key}&from=0&to=3`;
       observables.push(this.http.get<any>(url, this.httOptions).pipe(
         map((res) => {
           return res.hits.map((item: { recipe: any; _links: any }) => {
@@ -73,15 +63,8 @@ export class RecipeService {
     );
   }
 
-  getRecipeById(id?: string): Observable<any> {
-    let url =
-      'https://api.edamam.com/api/recipes/v2/' +
-      id +
-      '?type=public' +
-      '&app_id=' +
-      this.app_id +
-      '&app_key=' +
-      this.app_key;
+  getRecipeById(id: string): Observable<any> {
+    let url = `https://api.edamam.com/api/recipes/v2/${id}?type=public&app_id=${this.app_id}&app_key=${this.app_key}`;
     return this.http.get<any>(url, this.httOptions);
   }
 }

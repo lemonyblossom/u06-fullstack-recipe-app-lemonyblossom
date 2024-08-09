@@ -4,6 +4,7 @@ import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 import { RecipeidformatterPipe } from '../../pipes/recipeidformatter.pipe';
 import { RecipeResponse } from '../../interfaces/recipe';
 import { RecipeService } from '../../services/recipe.service';
+
 @Component({
   selector: 'app-recipe',
   standalone: true,
@@ -11,11 +12,9 @@ import { RecipeService } from '../../services/recipe.service';
   templateUrl: './recipe.component.html',
   styleUrl: './recipe.component.css'
 })
-
 export class RecipeComponent implements OnInit {
   id?: string;
   recipe?: RecipeResponse;
-
 
   constructor(private route: ActivatedRoute,
     private recipeService: RecipeService) { }
@@ -25,13 +24,13 @@ export class RecipeComponent implements OnInit {
       this.id = params.get('id') ?? '';
       console.log(this.id);
       if (this.id) {
-        this.getRecipeById();
+        this.getRecipeById(this.id);
       }
     });
   }
 
-  getRecipeById() {
-    this.recipeService.getRecipeById(this.id).subscribe((res) => {
+  getRecipeById(id: string) {
+    this.recipeService.getRecipeById(id).subscribe((res) => {
       console.table(res);
       let healthLabelsValue = res.recipe.healthLabels !== undefined && res.recipe.healthLabels.length > 0 ?
         res.recipe.healthLabels : 'no diet labels';
@@ -43,7 +42,7 @@ export class RecipeComponent implements OnInit {
       let recipe: RecipeResponse = {
         label: res.recipe.label,
         image: res.recipe.image,
-        ingredientLines: res.recipe.ngredientLines,
+        ingredientLines: res.recipe.ingredientLines,
         totalTime: res.recipe.totalTime,
         yield: res.recipe.yield,
         healthLabels: healthLabelsValue,

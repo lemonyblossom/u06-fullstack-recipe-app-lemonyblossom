@@ -1,15 +1,35 @@
 <div class="h-[88vh] m-2 flex flex-col overflow-hidden scrollbar-hidden">
    <div class="search-container mt-5 flex">
       <div class="flex flex-col">
-         <label for="searchTerm" class="text-yellow-700 ml-3 scrollbar-hidden">Search</label>
+         <label for="searchTerm" class="text-yellow-700 ml-3">Search</label>
          <input type="text" id="searchTerm" placeholder="Search for recipes..." [(ngModel)]="searchTerm"
             class="border-2 border-yellow-700 rounded-md px-2 py-1 bg-white ml-2" (keydown.enter)="onSearch()">
       </div>
 
       <div class="flex flex-col">
-         <label for="filterTerm" class="text-yellow-700 ml-3 scrollbar-hidden">Filter</label>
-         <input type="text" id="filterTerm" placeholder="Filter recipes..." [(ngModel)]="filterTerm"
-            class="border-2 border-yellow-700 rounded-md px-2 py-1 bg-white ml-2" (input)="onFilterChange()">
+         <label for="cuisineType" class="text-yellow-700 ml-3">Cuisine Type</label>
+         <select id="cuisineType" [(ngModel)]="cuisineType"
+            class="border-2 border-yellow-700 rounded-md px-2 py-1 bg-white ml-2">
+            <option value="">All</option>
+            <option value="American">American</option>
+            <option value="Italian">Italian</option>
+            <option value="Asian">Asian</option>
+            <!-- Add more cuisine types as needed -->
+         </select>
+      </div>
+
+      <div class="flex flex-col">
+         <label for="healthLabel" class="text-yellow-700 ml-3">Health Label</label>
+         <select id="healthLabel" [(ngModel)]="healthLabel"
+            class="border-2 border-yellow-700 rounded-md px-2 py-1 bg-white ml-2">
+            <option value="">All</option>
+            <option value="gluten-free">Gluten-Free</option>
+            <option value="kosher">Kosher</option>
+            <option value="low-sugar">Low-Sugar</option>
+            <option value="paleo">Paleo</option>
+            <option value="vegan">Vegan</option>
+            <option value="vegetarian">Vegetarian</option>
+         </select>
       </div>
 
       <button (click)="onSearch()"
@@ -24,11 +44,9 @@
       @for(recipe of recipes; track recipe) {
       <a [routerLink]="['/recipe', recipe.self | recipeidformatter]">
          <article class="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center">
-            <img src="{{ recipe.image }}" width="200" class="mx-auto mb-2" />
+            <img [src]="recipe.image" width="200" class="mx-auto mb-2" />
             <h3 class="text-lg font-semibold mb-2 text-center h-20">{{recipe.label}}</h3>
             <p class="text-center">Time to cook: {{recipe.totalTime}}</p>
-            <p class="text-center"><a [routerLink]="['/recipe', recipe.self | recipeidformatter]"
-                  class="text-amber-500 hover:text-amber-400 font-bold">Go to recipe</a></p>
          </article>
       </a>
       }
