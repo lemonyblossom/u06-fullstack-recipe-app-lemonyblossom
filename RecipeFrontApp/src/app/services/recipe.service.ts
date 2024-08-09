@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RecipeResponse } from '../interfaces/recipe';
@@ -39,21 +39,23 @@ export class RecipeService {
 
     dishTypes.forEach((dishType) => {
       const url = `${this.baseUrl}&dishType=${dishType}&random=true&app_id=${this.app_id}&app_key=${this.app_key}&from=0&to=3`;
-      observables.push(this.http.get<any>(url, this.httOptions).pipe(
-        map((res) => {
-          return res.hits.map((item: { recipe: any; _links: any }) => {
-            return {
-              dishType: item.recipe.dishType,
-              label: item.recipe.label,
-              image: item.recipe.image,
-              ingredientLines: item.recipe.ingredientLines,
-              totalTime: item.recipe.totalTime,
-              yield: item.recipe.yield,
-              self: item._links.self.href,
-            };
-          });
-        })
-      ));
+      observables.push(
+        this.http.get<any>(url, this.httOptions).pipe(
+          map((res) => {
+            return res.hits.map((item: { recipe: any; _links: any }) => {
+              return {
+                dishType: item.recipe.dishType,
+                label: item.recipe.label,
+                image: item.recipe.image,
+                ingredientLines: item.recipe.ingredientLines,
+                totalTime: item.recipe.totalTime,
+                yield: item.recipe.yield,
+                self: item._links.self.href,
+              };
+            });
+          })
+        )
+      );
     });
 
     return forkJoin(observables).pipe(

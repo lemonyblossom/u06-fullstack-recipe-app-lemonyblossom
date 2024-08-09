@@ -38,7 +38,6 @@ export class RecipeSearchComponent implements OnInit {
               totalTime: number;
               yield: number;
               dishType: string;
-              healthLabels: string[];
             };
             _links: { self: { href: string } };
           }) => {
@@ -49,7 +48,6 @@ export class RecipeSearchComponent implements OnInit {
               ingredientLines: item.recipe.ingredientLines,
               totalTime: item.recipe.totalTime,
               yield: item.recipe.yield,
-              healthLabels: item.recipe.healthLabels,
               self: item._links.self.href,
             };
           }
@@ -79,13 +77,5 @@ export class RecipeSearchComponent implements OnInit {
 
   onFilterChange() {
     this.applyFilter();
-  }
-
-  onCuisineTypeChange(event: any) {
-    this.cuisineType = event.target.value;
-  }
-
-  onHealthLabelChange(event: any) {
-    this.healthLabel = event.target.value;
   }
 }
